@@ -7,6 +7,7 @@ import com.qiaomu.test.domain.User;
 import com.qiaomu.test.service.UserService;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.TestExecutionListeners;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
@@ -32,7 +33,7 @@ import javax.annotation.Resource;
 @DbUnitConfiguration(dataSetLoader = ReplacementDataSetLoader.class)
 public class Test2U {
 
-    @Resource
+    @Autowired
     private UserService userService;
 
     @Test
