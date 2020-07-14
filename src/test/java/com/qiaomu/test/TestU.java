@@ -40,7 +40,7 @@ public class TestU {
     @ExpectedDatabase(value = "classpath:conf/insertUser.xml", assertionMode = DatabaseAssertionMode.NON_STRICT)
     @DatabaseTearDown(type = DatabaseOperation.DELETE_ALL, value = { "classpath:conf/user.xml" })
     public void test(){
-
+        System.out.println();
         try {
             String id = "1";
             String name = "qiaomu";
