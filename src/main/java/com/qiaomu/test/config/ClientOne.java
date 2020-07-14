@@ -8,7 +8,9 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.boot.jdbc.DataSourceBuilder;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Primary;
 import org.springframework.core.io.support.PathMatchingResourcePatternResolver;
+import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.datasource.DataSourceTransactionManager;
 
 import javax.sql.DataSource;
@@ -24,7 +26,7 @@ public class ClientOne {
     @Bean(name = "masterDataSource")
     @ConfigurationProperties(prefix = "spring.datasource.one")
     public DataSource testDataSource() {
-        return DataSourceBuilder.create().type(com.alibaba.druid.pool.DruidDataSource.class).build();
+        return DataSourceBuilder.create().create().type(com.alibaba.druid.pool.DruidDataSource.class).build();
     }
     @Bean(name = "masterSqlSessionFactory")
     public SqlSessionFactory testSqlSessionFactory(@Qualifier("masterDataSource") DataSource dataSource) throws Exception {
@@ -40,5 +42,10 @@ public class ClientOne {
     @Bean(name = "masterSqlSessionTemplate")
     public SqlSessionTemplate testSqlSessionTemplate(@Qualifier("masterSqlSessionFactory") SqlSessionFactory sqlSessionFactory) throws Exception {
         return new SqlSessionTemplate(sqlSessionFactory);
+    }
+    @Bean(name = "h2TemplateOne")
+    @Primary
+    public JdbcTemplate h2Template(@Qualifier("masterDataSource") DataSource dataSource) {
+        return new JdbcTemplate(dataSource);
     }
 }

@@ -1,6 +1,11 @@
 spring:
+#  h2:
+#    console:
+#      path: /h2-console #进入h2 web操作界面的路径
+#      enabled: true #开启h2 web界面
   datasource:
-    schema: classpath:SCHEMA.sql
+#    schema:
+#      - classpath:SCHEMA.sql
     initialization-mode: always
     one:
       driver-class-name: org.h2.Driver
@@ -8,12 +13,19 @@ spring:
       url: jdbc:h2:mem:testdb;MODE=MySQL;DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=FALSE
       username: qiaomu
       password:
+      type: com.alibaba.druid.pool.DruidDataSource
+
     two:
-      name: test2
+      name: testdb2
       driver-class-name: org.h2.Driver
-      url: jdbc:h2:~/test2
+      url: jdbc:h2:mem:testdb2;MODE=MySQL;DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=FALSE
       username: qiao
       password:
+      type: com.alibaba.druid.pool.DruidDataSource
+
+invoke:
+  schema:
+    location: SCHEMA.sql
 
 #  h2:
 #    console:
