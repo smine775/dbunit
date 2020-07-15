@@ -1,8 +1,8 @@
 spring:
-#  h2:
-#    console:
-#      path: /h2-console #进入h2 web操作界面的路径
-#      enabled: true #开启h2 web界面
+  h2:
+    console:
+      path: /h2-console #进入h2 web操作界面的路径
+      enabled: true #开启h2 web界面
   datasource:
 #    schema:
 #      - classpath:SCHEMA.sql

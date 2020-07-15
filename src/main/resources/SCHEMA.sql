@@ -5,3 +5,11 @@ CREATE TABLE user (
   name VARCHAR(250) DEFAULT NULL,
   age int(11) DEFAULT NULL,
 );
+
+DROP TABLE IF EXISTS student;
+
+CREATE TABLE student (
+  id varchar (250) PRIMARY KEY,
+  className VARCHAR(250) DEFAULT NULL,
+  age int(11) DEFAULT NULL,
+);

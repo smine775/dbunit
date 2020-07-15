@@ -1,5 +1,6 @@
 package com.qiaomu.test;
 
+import com.github.springtestdbunit.DbUnitTestExecutionListener;
 import com.github.springtestdbunit.annotation.*;
 import com.github.springtestdbunit.assertion.DatabaseAssertionMode;
 import com.github.springtestdbunit.dataset.ReplacementDataSetLoader;
@@ -29,32 +30,56 @@ import javax.annotation.Resource;
 @SpringBootTest
 @TestExecutionListeners({DependencyInjectionTestExecutionListener.class,
         DirtiesContextTestExecutionListener.class,
-        TransactionalTestExecutionListener.class})
-@DbUnitConfiguration(dataSetLoader = ReplacementDataSetLoader.class)
+        TransactionalTestExecutionListener.class,
+        DbUnitTestExecutionListener.class})
+@DbUnitConfiguration(dataSetLoader = ReplacementDataSetLoader.class,databaseConnection={"masterDataSource","slaveofDataSource"})
 public class Test2U {
 
     @Autowired
     private UserService userService;
 
     @Test
-    @DatabaseSetup(type = DatabaseOperation.CLEAN_INSERT, value = { "classpath:conf/insertUser.xml" })
-    @ExpectedDatabase(value = "classpath:conf/updateUser.xml", assertionMode = DatabaseAssertionMode.NON_STRICT)
-    @DatabaseTearDown(type = DatabaseOperation.DELETE_ALL, value = { "classpath:conf/user.xml" })
+    @DatabaseSetup(connection = "slaveofDataSource",type = DatabaseOperation.CLEAN_INSERT, value = { "classpath:conf/insertUser.xml" })
+    @ExpectedDatabase(connection = "slaveofDataSource",value = "classpath:conf/updateUser.xml", assertionMode = DatabaseAssertionMode.NON_STRICT)
+    @DatabaseTearDown(connection = "slaveofDataSource",type = DatabaseOperation.DELETE_ALL, value = { "classpath:conf/user.xml" })
     public void test2(){
 
         try {
-            String id = "1";
-            String name = "qiaomuddd";
+            String id = "6";
+            String name = "mou";
             int age = 20;
             User user  = new User();
             user.setId(id);
             user.setName(name);
             user.setAge(age);
-            userService.update(user);
+            int i= userService.update(user);
+            System.out.println();
         } catch (Exception e) {
             e.printStackTrace();
             System.out.println(e.getMessage());
         }
 
     }
+
+   /* @Test
+    @DatabaseSetups({
+            @DatabaseSetup(connection = "masterDataSource" ,type = DatabaseOperation.CLEAN_INSERT, value = { "classpath:conf/user.xml" }),
+            @DatabaseSetup(connection = "slaveofDataSource",type = DatabaseOperation.CLEAN_INSERT, value = { "classpath:conf/Student.xml" })
+    })
+    @ExpectedDatabases({
+            @ExpectedDatabase(connection = "masterDataSource" ,value = "classpath:conf/allInsert.xml", assertionMode = DatabaseAssertionMode.NON_STRICT),
+            @ExpectedDatabase(connection = "slaveofDataSource",value = "classpath:conf/allInsertDatasourceTwo.xml", assertionMode = DatabaseAssertionMode.NON_STRICT)
+
+    })
+
+    @DatabaseTearDowns({
+            @DatabaseTearDown(type = DatabaseOperation.DELETE_ALL, value = { "classpath:conf/user.xml" }),
+            @DatabaseTearDown(type = DatabaseOperation.DELETE_ALL, value = { "classpath:conf/Student.xml" })
+    })
+    public void test3(){
+
+        studentAndUserService.insert();
+        studentAndUserService.select(id);
+
+    }*/
 }

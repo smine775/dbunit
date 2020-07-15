@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<dataset>
+
+    <user id="1" name="qiaomu" age="23"/>
+    <student id="2" className="yiban" age="18"/>
+</dataset>

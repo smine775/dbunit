@@ -23,11 +23,13 @@ import javax.sql.DataSource;
 @MapperScan(basePackages ="com.qiaomu.test.mapper.one", sqlSessionTemplateRef  = "masterSqlSessionTemplate")
 public class ClientOne {
 
+    @Primary
     @Bean(name = "masterDataSource")
     @ConfigurationProperties(prefix = "spring.datasource.one")
     public DataSource testDataSource() {
         return DataSourceBuilder.create().create().type(com.alibaba.druid.pool.DruidDataSource.class).build();
     }
+    @Primary
     @Bean(name = "masterSqlSessionFactory")
     public SqlSessionFactory testSqlSessionFactory(@Qualifier("masterDataSource") DataSource dataSource) throws Exception {
         SqlSessionFactoryBean bean = new SqlSessionFactoryBean();
@@ -35,10 +37,12 @@ public class ClientOne {
         bean.setMapperLocations(new PathMatchingResourcePatternResolver().getResources("classpath:mapper/one/*.xml"));
         return bean.getObject();
     }
+    @Primary
     @Bean(name = "masterTransactionManager")
     public DataSourceTransactionManager testTransactionManager(@Qualifier("masterDataSource") DataSource dataSource) {
         return new DataSourceTransactionManager(dataSource);
     }
+    @Primary
     @Bean(name = "masterSqlSessionTemplate")
     public SqlSessionTemplate testSqlSessionTemplate(@Qualifier("masterSqlSessionFactory") SqlSessionFactory sqlSessionFactory) throws Exception {
         return new SqlSessionTemplate(sqlSessionFactory);
